@@ -4,7 +4,7 @@ def print_header
   puts "-----------".center(100)
 end
 
-@student = []
+@students = []
 
 def interactive_menu
   
@@ -18,6 +18,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save list to students.csv"
+  puts "4. Load list from students.csv"
   puts "9. Exit" 
 end
 
@@ -35,6 +36,8 @@ def process(selection)
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit
   else 
@@ -58,6 +61,16 @@ def save_students
   file.close
 end
 
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    first_name, last_name, cohort = line.chomp.split(',')
+    @students << {:first_name => first_name, :last_name => last_name, :cohort => cohort.to_sym}
+  end
+  file.close
+end
+
+
 
 def input_students
 # get user first name
@@ -76,7 +89,7 @@ def input_students
 
 while !first_name.empty? do 
   @students = @students || []
-    @students << {:first_name => first_name.to_sym, :last_name => last_name.to_sym, :cohort => cohort.to_sym}
+    @students << {:first_name => first_name, :last_name => last_name, :cohort => cohort.to_sym}
   if  @students.length > 1
     puts "Now we have #{@students.length} exceptionally talented students!!!".center(100)
   else
